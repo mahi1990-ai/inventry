@@ -24,8 +24,19 @@ public class ProductService {
         products.add(new Product(3, "Product C", true, 3, null));
     }
 
-    public List<Product> getAll() {
-        return enrichWithSupplierInfo(new ArrayList<>(products));
+    public List<Product> getAll(Boolean available) {
+
+        Map<Integer, Product> uniqueProducts = new HashMap<>();
+        for (Product p : products) {
+            uniqueProducts.put(p.getId(), p);
+        }
+        List<Product> filtered = new ArrayList<>(uniqueProducts.values());
+        if (available != null) {
+           return filtered.stream()
+                    .filter(p -> p.isAvailable() == available)
+                    .collect(Collectors.toList());
+        }
+        return enrichWithSupplierInfo(new ArrayList<>(filtered));
     }
 
     public Optional<Product> getById(Integer id) {
