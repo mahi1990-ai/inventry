@@ -1,5 +1,6 @@
 package uk.co.prodapt.inventory.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -40,8 +41,8 @@ public class InventoryController {
 
     @ApiResponse(responseCode = "200", description = "Returns list of all products", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class))))
     @GetMapping
-    public List<Product> list() {
-        return productService.getAll();
+    public List<Product> list(@RequestParam(value = "available", required = false) Boolean available) {
+        return productService.getAll(available);
     }
 
     @ApiResponse(responseCode = "200", description = "Product returned", content = @Content(schema = @Schema(implementation = Product.class)))
